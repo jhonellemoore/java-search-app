@@ -26,6 +26,7 @@ public class MongodbConfig {
 
     @Bean
     public MongoClient mongoClient() {
+        // Create a CodecRegistry for POJO (Plain Old Java Object) encoding and decoding
         CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
             MongoClientSettings.getDefaultCodecRegistry(),
             CodecRegistries.fromProviders(
@@ -33,11 +34,13 @@ public class MongodbConfig {
             )
         );
 
+        // Build MongoClientSettings with the provided MongoDB URI and the POJO CodecRegistry
         MongoClientSettings settings = MongoClientSettings.builder()
             .applyConnectionString(new ConnectionString(MONGODB_URI))
             .codecRegistry(pojoCodecRegistry)
             .build();
 
+        // Create and return a MongoClient
         return MongoClients.create(settings);
     }
     @Bean
